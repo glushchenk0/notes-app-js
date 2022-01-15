@@ -1,0 +1,16 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+svg {
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+}
+
+.selector {
+    cursor: pointer;
+}
