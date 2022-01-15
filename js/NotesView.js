@@ -299,7 +299,6 @@ export default class NotesView {
             const active = notes
                 .filter((note) => note.category === category)
                 .filter((note) => note.archived === true).length;
-            console.log(`${category}|${archived}|${active}`);
             const html = this._createListSummaryHTML(
                 category,
                 archived,
@@ -327,9 +326,6 @@ export default class NotesView {
                     );
 
                     if (doDelete) {
-                        inpTitle.value = '';
-                        inpBody.value = '';
-                        btnAddNote.textContent = 'Create Note';
                         this.onNoteDelete(noteListItem.dataset.noteId);
                     }
                 });
@@ -361,9 +357,6 @@ export default class NotesView {
                     );
 
                     if (doDelete) {
-                        inpTitle.value = '';
-                        inpBody.value = '';
-                        btnAddNote.textContent = 'Create Note';
                         this.onNoteDelete(noteListItem.dataset.noteId);
                     }
                 });
