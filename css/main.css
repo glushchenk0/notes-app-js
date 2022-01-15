@@ -11,6 +11,10 @@ svg {
     cursor: pointer;
 }
 
+a svg {
+    color: white;
+}
+
 .selector {
     cursor: pointer;
 }

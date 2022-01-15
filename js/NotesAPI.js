@@ -2,7 +2,7 @@ export default class NotesAPI {
     static getAllNotes() {
         const defaultNotes = [
             {
-                id: 0,
+                id: 7,
                 name: 'ARCHIVED | B-day',
                 updated: new Date(2021, 2, 30),
                 category: 'Task',

@@ -25,7 +25,8 @@ export default class NotesView {
                 <div class="col m-3">Dates</div>
                 <div class="col-md-auto m-3">
                     <div id="header-archive"class="header-archive d-inline m-1">
-                        <svg
+					<a href="#archived-table">
+					<svg
                             aria-hidden="true"
                             focusable="false"
                             data-prefix="fas"
@@ -40,6 +41,8 @@ export default class NotesView {
                                 d="M32 448c0 17.7 14.3 32 32 32h384c17.7 0 32-14.3 32-32V160H32v288zm160-212c0-6.6 5.4-12 12-12h104c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-8zM480 32H32C14.3 32 0 46.3 0 64v48c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V64c0-17.7-14.3-32-32-32z"
                             ></path>
                         </svg>
+					</a>
+                        
                     </div>
                     <div class="delete d-inline m-1">
                         <svg
@@ -111,8 +114,52 @@ export default class NotesView {
                 <div class="col m-3">Active</div>
                 <div class="col m-3">Archived</div>
             </div>
-			<div id="summaryTable" class='summaryTable'>
+			<div id="summaryTable" class='summaryTable'></div>
+			<!-- Archived Notes Header -->
+			<div class="row mt-3 bg-secondary text-white border rounded" id="archived-table">
+                <div class="col m-3">Name</div>
+                <div class="col m-3">Created</div>
+                <div class="col m-3">Category</div>
+                <div class="col m-3">Content</div>
+                <div class="col m-3">Dates</div>
+                <div class="col-md-auto m-3">
+                    <div id="header-archive"class="header-archive d-inline m-1">
+                        <svg
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="fas"
+                            data-icon="archive"
+                            class="svg-inline--fa fa-archive fa-w-16"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                        >
+                            <path
+                                fill="currentColor"
+                                d="M32 448c0 17.7 14.3 32 32 32h384c17.7 0 32-14.3 32-32V160H32v288zm160-212c0-6.6 5.4-12 12-12h104c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H204c-6.6 0-12-5.4-12-12v-8zM480 32H32C14.3 32 0 46.3 0 64v48c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16V64c0-17.7-14.3-32-32-32z"
+                            ></path>
+                        </svg>
+                    </div>
+                    <div class="delete d-inline m-1">
+                        <svg
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="far"
+                            data-icon="trash-alt"
+                            class="svg-inline--fa fa-trash-alt fa-w-14"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 448 512"
+                        >
+                            <path
+                                fill="currentColor"
+                                d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"
+                            ></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
+			<div id="archivedNotes" class="archivedNotes"></div>
         `;
 
         const formAddNote = document.getElementById('form');
@@ -120,10 +167,10 @@ export default class NotesView {
         const inpTitle = document.getElementById('inputNoteName');
         const inpBody = document.getElementById('inputNoteBody');
         const inpCategory = document.getElementById('inputNoteCategory');
-        const btnArchive = document.getElementById('header-archive');
-        btnArchive.addEventListener('click', () => {
-            alert('Function in development');
-        });
+        // const btnArchive = document.getElementById('header-archive');
+        // btnArchive.addEventListener('click', () => {
+        //     alert('Function in development');
+        // });
         formAddNote.addEventListener('submit', (e) => {
             e.preventDefault();
             this.onNoteAdd(inpTitle.value, inpCategory.value, inpBody.value);
@@ -213,9 +260,11 @@ export default class NotesView {
     updateNoteList(notes, archived = false) {
         const notesListContainer = this.root.querySelector('.notes__list');
         const summaryTableContainer = this.root.querySelector('.summaryTable');
+        const archivedListContainer = this.root.querySelector('.archivedNotes');
         // Empty list
         notesListContainer.innerHTML = '';
         summaryTableContainer.innerHTML = '';
+        archivedListContainer.innerHTML = '';
         const allCategories = new Set();
 
         for (const note of notes) {
@@ -230,6 +279,16 @@ export default class NotesView {
                     note.dateslist
                 );
                 notesListContainer.insertAdjacentHTML('beforeend', html);
+            } else {
+                const html = this._createListItemHTML(
+                    note.id,
+                    note.name,
+                    new Date(note.updated),
+                    note.category,
+                    note.content,
+                    note.dateslist
+                );
+                archivedListContainer.insertAdjacentHTML('beforeend', html);
             }
         }
 
@@ -268,6 +327,43 @@ export default class NotesView {
                     );
 
                     if (doDelete) {
+                        inpTitle.value = '';
+                        inpBody.value = '';
+                        btnAddNote.textContent = 'Create Note';
+                        this.onNoteDelete(noteListItem.dataset.noteId);
+                    }
+                });
+
+                editArchive.addEventListener('click', () => {
+                    const doArchive = confirm(
+                        'Are you sure you want to archive this note?'
+                    );
+
+                    if (doArchive) {
+                        this.onNoteArchive(noteListItem.dataset.noteId);
+                    }
+                });
+            });
+        archivedListContainer
+            .querySelectorAll('.notes__list-item')
+            .forEach((noteListItem) => {
+                const editNote = noteListItem.querySelector('.note-edit');
+                const editArchive = noteListItem.querySelector('.note-archive');
+                const editDelete = noteListItem.querySelector('.note-delete');
+                editNote.addEventListener('click', () => {
+                    this.onNoteSelect(noteListItem.dataset.noteId);
+                    btnAddNote.textContent = 'Update Note';
+                });
+
+                editDelete.addEventListener('click', () => {
+                    const doDelete = confirm(
+                        'Are you sure you want to delete this note?'
+                    );
+
+                    if (doDelete) {
+                        inpTitle.value = '';
+                        inpBody.value = '';
+                        btnAddNote.textContent = 'Create Note';
                         this.onNoteDelete(noteListItem.dataset.noteId);
                     }
                 });
