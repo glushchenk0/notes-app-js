@@ -182,7 +182,7 @@ export default class NotesView {
 
     _createListItemHTML(id, name, updated, category, content, dates) {
         return `
-                <div class="row mt-3 border rounded notes__list-item" data-note-id="${id}">
+                <div class="row mt-3 mb-3 border rounded notes__list-item" data-note-id="${id}">
                     <div class="col m-3 text-truncate">${name}</div>
                     <div class="col m-3 text-truncate">${updated.getDate()}/${
             updated.getMonth() + 1
